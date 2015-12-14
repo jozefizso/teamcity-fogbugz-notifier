@@ -2,15 +2,15 @@
 <teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
   <info>
     <name>teamcity-fogbugz-notifier</name>
-    <display-name>teamcity-fogbugz-notifier</display-name>
+    <display-name>TeamCity FogBugz Notifier</display-name>
     <version>@Version@</version>
-    <description>Plugin description</description>
-    <download-url>Plugin download URL</download-url>
-    <email>Plugin author e-mail</email>
+    <description>Notify FogBugz about build events and show extended build info in related FogBugz cases.</description>
+    <download-url>https://github.com/jozefizso/teamcity-fogbugz-notifier</download-url>
+    <email>jozef.izso@gmail.com</email>
     <vendor>
       <name>@VendorName@</name>
       <url>@VendorURL@</url>
-      <logo>Plugin vendor logo URL</logo>
+      <logo></logo>
     </vendor>
   </info>
   <deployment use-separate-classloader="true" />
