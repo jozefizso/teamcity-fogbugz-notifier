@@ -6,28 +6,28 @@
     <format>zip</format>
   </formats>
   <files>
-     <file>
-         <source>target/teamcity-plugin.xml</source>
-         <outputDirectory>/</outputDirectory>
-     </file> 
+    <file>
+      <source>target/teamcity-plugin.xml</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
   </files>
   <moduleSets>
     <moduleSet>
-       <useAllReactorProjects>true</useAllReactorProjects>
-       <includes>
-           <include>teamcity:teamcity-fogbugz-notifier-server</include>
-       </includes> 
-       <binaries>
-           <outputDirectory>server</outputDirectory>
-           <unpack>false</unpack>
-           <dependencySets>
-               <dependencySet>
-                    <includes>
-                         <include>*</include>
-                    </includes>
-               </dependencySet>
-           </dependencySets>
-       </binaries>
+      <useAllReactorProjects>true</useAllReactorProjects>
+      <includes>
+        <include>teamcity:teamcity-fogbugz-notifier-server</include>
+      </includes>
+      <binaries>
+        <outputDirectory>server</outputDirectory>
+        <unpack>false</unpack>
+        <dependencySets>
+          <dependencySet>
+            <includes>
+              <include>*</include>
+            </includes>
+          </dependencySet>
+        </dependencySets>
+      </binaries>
     </moduleSet>
   </moduleSets>
 </assembly>
