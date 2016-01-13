@@ -5,10 +5,8 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class FogBugzNotifierBuildFeature extends BuildFeature {
-    private static final String FEATURE_TYPE = "FogBugzNotifierBuildFeature";
+    public static final String FEATURE_TYPE = "FogBugzNotifierBuildFeature";
 
     private final PluginDescriptor myPluginDescriptor;
 

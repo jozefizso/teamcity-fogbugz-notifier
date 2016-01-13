@@ -9,6 +9,14 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 
 public class FogBugzNotifierBuildFeatureTest {
+    @Test
+    public void FogBugzNotifierBuildFeature_FEATURE_TYPE_HasCorrectValue() throws Exception {
+        // Arrange & Act
+        String actualFogBugzNotifierBuildFeatureType = FogBugzNotifierBuildFeature.FEATURE_TYPE;
+
+        // Assert
+        assertEquals(actualFogBugzNotifierBuildFeatureType, "FogBugzNotifierBuildFeature");
+    }
 
     @Test
     public void constructor_objectHasCorrectPropertyValues() throws Exception {
@@ -19,7 +27,7 @@ public class FogBugzNotifierBuildFeatureTest {
         FogBugzNotifierBuildFeature buildFeature = new FogBugzNotifierBuildFeature(descMock);
 
         // Assert
-        assertEquals(buildFeature.getType(), "FogBugzNotifierBuildFeature");
+        assertEquals(buildFeature.getType(), FogBugzNotifierBuildFeature.FEATURE_TYPE);
         assertEquals(buildFeature.getDisplayName(), "FogBugz Extended Notifications");
         assertFalse(buildFeature.isMultipleFeaturesPerBuildTypeAllowed(), "Only a single instance of FogBugzNotifierBuildFeature is allowed per build.");
     }
