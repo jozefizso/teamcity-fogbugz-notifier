@@ -28,7 +28,7 @@ public class FogBugzNotifierBuildFeatureTest {
 
         // Assert
         assertEquals(buildFeature.getType(), FogBugzNotifierBuildFeature.FEATURE_TYPE);
-        assertEquals(buildFeature.getDisplayName(), "FogBugz Extended Notifications");
+        assertEquals(buildFeature.getDisplayName(), "Report build status to FogBugz");
         assertFalse(buildFeature.isMultipleFeaturesPerBuildTypeAllowed(), "Only a single instance of FogBugzNotifierBuildFeature is allowed per build.");
     }
 

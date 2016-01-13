@@ -23,7 +23,7 @@ public class FogBugzNotifierBuildFeature extends BuildFeature {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "FogBugz Extended Notifications";
+        return "Report build status to FogBugz";
     }
 
     @Nullable
