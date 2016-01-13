@@ -14,6 +14,6 @@
 </tr>
 
 <tr>
-  <td colspan="2">FogBugz muse have Extended Notifications plugin installed.</td>
+  <td colspan="2">FogBugz must have Extended Notifications plugin installed.</td>
 </tr>
 
