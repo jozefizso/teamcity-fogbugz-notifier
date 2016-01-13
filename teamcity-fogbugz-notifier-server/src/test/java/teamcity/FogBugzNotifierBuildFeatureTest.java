@@ -15,7 +15,7 @@ public class FogBugzNotifierBuildFeatureTest {
         String actualFogBugzNotifierBuildFeatureType = FogBugzNotifierBuildFeature.FEATURE_TYPE;
 
         // Assert
-        assertEquals(actualFogBugzNotifierBuildFeatureType, "FogBugzNotifierBuildFeature");
+        assertEquals(actualFogBugzNotifierBuildFeatureType, "io.goit.teamcity.FogBugzNotifierBuildFeature");
     }
 
     @Test

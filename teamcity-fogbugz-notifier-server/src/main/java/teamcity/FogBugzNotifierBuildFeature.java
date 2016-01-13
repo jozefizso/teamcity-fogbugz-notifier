@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FogBugzNotifierBuildFeature extends BuildFeature {
-    public static final String FEATURE_TYPE = "FogBugzNotifierBuildFeature";
+    public static final String FEATURE_TYPE = "io.goit.teamcity.FogBugzNotifierBuildFeature";
 
     private final PluginDescriptor myPluginDescriptor;
 
