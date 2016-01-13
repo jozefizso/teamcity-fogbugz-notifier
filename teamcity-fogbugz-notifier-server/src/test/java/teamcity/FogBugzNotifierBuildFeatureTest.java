@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 
-public class FogBugzNotifierBuildFeatureTests {
+public class FogBugzNotifierBuildFeatureTest {
 
     @Test
     public void constructor_objectHasCorrectPropertyValues() throws Exception {

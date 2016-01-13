@@ -4,7 +4,7 @@ import jetbrains.buildServer.serverSide.SBuildServer;
 
 import static org.mockito.Mockito.*;
 
-public class FogBugzNotifierTests {
+public class FogBugzNotifierTest {
 
     @org.testng.annotations.Test
     public void register_notifierInstance_registerInstanceAsListener() throws Exception {
