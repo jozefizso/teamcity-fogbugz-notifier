@@ -9,6 +9,16 @@ jdk:
 script:
   - mvn test
 
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report -Dcoveralls.token=${COVERALLS_TOKEN}
+
 cache:
   directories:
     - $HOME/.m2
+
+env:
+  global:
+    # Generated with these instructions: http://docs.travis-ci.com/user/encryption-keys/
+    # gem install travis
+    # travis encrypt COVERALLS_TOKEN=<the token from coveralls>
+    secure: "uxhL0iT6ZzQO6QO+Lmsxbl/jr+EK+6WWOYG1wdLkxuUltg0C8Qn/7fxFH03mvSEu9bydxxB9xrEKj+Oa1fg9fsLD2xgDyiEr9Lmy5pMumjHR+oi+g8rRKb2M8DtQLbaEx7C875/7GD0xDPxuXkwMt7zO10W/Maob0Wh6zmUy7m9YEvBmgDlHZHsohOudOZzAx/qJIMy+2pfyfx6pDNLUOxaaBHVCcgzWT8QqJ2UGzq2PuFBbtrw8Ih/QmbNdNcTKfBUNKaZrLZTnWe90yTRJ/OL3L9bsRiEXi+s8luDI3riBgv4zeK/Yv8iKgXIB4ypb5Sw0rVB9lihGpsYX2G0qJ4mM+5yvx3Go0CaVx1cDyrGPtdjiL/qwTFFXup3PdBEigjwO6t41rO7QjKNawugrVRm4PZ7yvbrXgK57i6QEMFSJgWv+QJLL1V0dF4c9SP4icoHUKRbHBZa8AQLuAxcPZHwtbkHVrtHN6WgaEq2vDka8t4EyZ6oROPrTLW9D4cfRp9k+zOsijkJvrPhlnk3MWSWWRnIaltYR23sSYCq9pzTzNi9P1N3xghf+EURHp5psABZ3NQlG+l4rizWaGDoqIULtSjqeRztjm5nLo8iJDhOpSZFY208BUkFVb50oiJ1poiWS0++Ba9K0E1AvmBAbH0W/l4LHz8U3ZT0KR2D0f3E="
