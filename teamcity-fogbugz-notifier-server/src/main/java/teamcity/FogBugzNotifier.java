@@ -1,6 +1,7 @@
 package teamcity;
 
 import com.intellij.openapi.diagnostic.Logger;
+import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.BuildServerAdapter;
 import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
 import jetbrains.buildServer.serverSide.SBuildServer;
@@ -26,11 +27,17 @@ public class FogBugzNotifier extends BuildServerAdapter {
 
     @Override
     public void buildFinished(@NotNull SRunningBuild build) {
+        Status buildStatus = build.getBuildStatus();
+        String buildStatusText = buildStatus.getText();
+
+        String statusDescription = build.getStatusDescriptor().getText();
+
         for (SBuildFeatureDescriptor feature : build.getBuildFeaturesOfType(FogBugzNotifierBuildFeature.FEATURE_TYPE)) {
             Map<String, String> params = feature.getParameters();
             String url = params.get("fbAddress");
 
             LOG.debug(String.format("Build feature '%s': server address=%s", feature.getType(), url));
+            LOG.info(buildStatusText +": "+ statusDescription);
         }
     }
 }
