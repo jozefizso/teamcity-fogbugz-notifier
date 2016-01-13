@@ -1,3 +1,6 @@
+<%@ include file="/include-internal.jsp" %>
+<%@ taglib prefix="props" tagdir="/WEB-INF/tags/props" %>
+
 <tr>
   <td colspan="2">
     <em>Publish build status to FogBugz with Extended Notifications plugin.</em>
