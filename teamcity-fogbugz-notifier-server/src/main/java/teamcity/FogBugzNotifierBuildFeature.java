@@ -38,9 +38,4 @@ public class FogBugzNotifierBuildFeature extends BuildFeature {
     public boolean isMultipleFeaturesPerBuildTypeAllowed() {
         return false;
     }
-
-    @Override
-    public String describeParameters(Map<String, String> params) {
-        return "Example Build Feature plugin";
-    }
 }
