@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class FogBugzNotifierBuildFeatureTest {
     @Test
@@ -29,7 +30,7 @@ public class FogBugzNotifierBuildFeatureTest {
         // Assert
         assertEquals(buildFeature.getType(), FogBugzNotifierBuildFeature.FEATURE_TYPE);
         assertEquals(buildFeature.getDisplayName(), "Report build status to FogBugz");
-        assertFalse(buildFeature.isMultipleFeaturesPerBuildTypeAllowed(), "Only a single instance of FogBugzNotifierBuildFeature is allowed per build.");
+        assertTrue(buildFeature.isMultipleFeaturesPerBuildTypeAllowed(), "FogBugzNotifierBuildFeature can be defined multiple times per build.");
     }
 
     @DataProvider(name = "providePluginResourcesPaths")

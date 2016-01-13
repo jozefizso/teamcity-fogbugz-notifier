@@ -34,6 +34,6 @@ public class FogBugzNotifierBuildFeature extends BuildFeature {
 
     @Override
     public boolean isMultipleFeaturesPerBuildTypeAllowed() {
-        return false;
+        return true;
     }
 }
