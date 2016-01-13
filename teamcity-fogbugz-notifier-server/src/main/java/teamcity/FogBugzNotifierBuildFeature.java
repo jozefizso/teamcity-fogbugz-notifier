@@ -5,6 +5,8 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class FogBugzNotifierBuildFeature extends BuildFeature {
     public static final String FEATURE_TYPE = "io.goit.teamcity.FogBugzNotifierBuildFeature";
 
@@ -35,5 +37,13 @@ public class FogBugzNotifierBuildFeature extends BuildFeature {
     @Override
     public boolean isMultipleFeaturesPerBuildTypeAllowed() {
         return true;
+    }
+
+    @NotNull
+    @Override
+    public String describeParameters(@NotNull Map<String, String> params) {
+        String url = params.get("fbAddress");
+
+        return "Report build status to FogBugz at "+ url;
     }
 }

@@ -4,6 +4,9 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -55,5 +58,21 @@ public class FogBugzNotifierBuildFeatureTest {
 
         // Assert
         assertEquals(actualEditParametersUrl, expectedEditParametersUrl);
+    }
+
+    @Test
+    public void describeParameters_PluginResourcesPathProvidedByPluginDescriptor_ReturnsCorrectUrl() throws Exception {
+        // Arrange
+        PluginDescriptorStub descriptorStub = new PluginDescriptorStub();
+        FogBugzNotifierBuildFeature buildFeature = new FogBugzNotifierBuildFeature(descriptorStub);
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("fbAddress", "https://fb.localtest.me/");
+
+        // Act
+        String actualEditParametersUrl = buildFeature.describeParameters(params);
+
+        // Assert
+        assertEquals(actualEditParametersUrl, "Report build status to FogBugz at https://fb.localtest.me/");
     }
 }
