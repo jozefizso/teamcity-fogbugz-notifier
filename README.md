@@ -1,6 +1,8 @@
 TeamCity FogBugz Notifier
 ==============================================================
 
+> *This plugin is incomplete and it is not actively developed.*
+
 This plugin enables TeamCity deeper integration with FogBugz.
 The plugin will notify FogBugz about successful and failed build
 that match a FogBugz case.
