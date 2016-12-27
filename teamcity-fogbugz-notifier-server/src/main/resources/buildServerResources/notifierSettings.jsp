@@ -17,6 +17,15 @@
 </tr>
 
 <tr>
-  <td colspan="2">FogBugz must have Extended Notifications plugin installed.</td>
+  <th><label for="sToken">Access Token:<l:star/></label></th>
+  <td>
+    <props:textProperty name="sToken" className="longField"/>
+    <span class="smallNote">Specify FogBugz access token.</span>
+    <span class="error" id="error_sToken"></span>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2">FogBugz must have the <em>FogBugz Extended Events</em> plugin installed.</td>
 </tr>
 
