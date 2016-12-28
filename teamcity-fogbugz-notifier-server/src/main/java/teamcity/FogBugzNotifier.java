@@ -71,6 +71,8 @@ public class FogBugzNotifier extends BuildServerAdapter {
             Map<String, String> featureParams = feature.getParameters();
             String url = featureParams.get("fbAddress");
             String token = featureParams.get("sToken");
+            String moduleName = featureParams.get("sModuleName");
+            String branchName = featureParams.get("sBranchName");
 
             LOG.debug(String.format("Build %s is configured with fbAddress=%s, sToken=%s", buildId, url, token));
 
@@ -85,6 +87,8 @@ public class FogBugzNotifier extends BuildServerAdapter {
                 data.setPersonName(personName);
                 data.setMessage(statusDescription);
                 data.setExternalUrl(viewResultsUrl);
+                data.setModuleName(moduleName);
+                data.setBranchName(branchName);
 
                 try {
                     LOG.info(String.format("Sending data to FogBugz case '%s'", bugzId));

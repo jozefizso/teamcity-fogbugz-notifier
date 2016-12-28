@@ -26,6 +26,8 @@ public class FogBugzEventData {
     private String sPersonName;
     private String sMessage;
     private String sExternalUrl;
+    private String sModuleName;
+    private String sBranchName;
 
     public String getToken() {
         return token;
@@ -91,6 +93,22 @@ public class FogBugzEventData {
         this.sExternalUrl = sExternalUrl;
     }
 
+    public String getModuleName() {
+        return sModuleName;
+    }
+
+    public void setModuleName(String sModuleName) {
+        this.sModuleName = sModuleName;
+    }
+
+    public String getBranchName() {
+        return sBranchName;
+    }
+
+    public void setBranchName(String sBranchName) {
+        this.sBranchName = sBranchName;
+    }
+
     public List<NameValuePair> toParams() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("token", this.token));
@@ -101,6 +119,8 @@ public class FogBugzEventData {
         params.add(new BasicNameValuePair("sPersonName", this.sPersonName));
         params.add(new BasicNameValuePair("sMessage", this.sMessage));
         params.add(new BasicNameValuePair("sExternalUrl", this.sExternalUrl));
+        params.add(new BasicNameValuePair("sModuleName", this.sModuleName));
+        params.add(new BasicNameValuePair("sBranchName", this.sBranchName));
 
         return params;
     }

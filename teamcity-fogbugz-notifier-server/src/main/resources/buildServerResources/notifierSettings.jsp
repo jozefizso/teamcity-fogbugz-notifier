@@ -26,6 +26,24 @@
 </tr>
 
 <tr>
+  <th><label for="sModuleName">Module Name:</label></th>
+  <td>
+    <props:textProperty name="sModuleName" className="longField"/>
+    <span class="smallNote">Name of the module that will be reported in message.</span>
+    <span class="error" id="error_sModuleName"></span>
+  </td>
+</tr>
+
+<tr>
+  <th><label for="sBranchName">Branch Name:</label></th>
+  <td>
+    <props:textProperty name="sBranchName" className="longField"/>
+    <span class="smallNote">Name of the branch that will be reported in message.</span>
+    <span class="error" id="error_sBranchName"></span>
+  </td>
+</tr>
+
+<tr>
   <td colspan="2">FogBugz must have the <em>FogBugz Extended Events</em> plugin installed.</td>
 </tr>
 
