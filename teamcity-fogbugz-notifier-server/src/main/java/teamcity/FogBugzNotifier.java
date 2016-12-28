@@ -1,12 +1,11 @@
 package teamcity;
 
 import com.intellij.openapi.diagnostic.Logger;
+import jetbrains.buildServer.issueTracker.Issue;
 import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.Status;
-import jetbrains.buildServer.serverSide.BuildServerAdapter;
-import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
-import jetbrains.buildServer.serverSide.SBuildServer;
-import jetbrains.buildServer.serverSide.SRunningBuild;
+import jetbrains.buildServer.serverSide.*;
+import jetbrains.buildServer.users.SUser;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,6 +14,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
@@ -27,9 +27,11 @@ public class FogBugzNotifier extends BuildServerAdapter {
     private static Logger LOG = Logger.getInstance(FogBugzNotifier.class.getName());
 
     private SBuildServer server;
+    private BuildsManager buildsManager;
 
-    public FogBugzNotifier(@NotNull SBuildServer server) {
+    public FogBugzNotifier(@NotNull SBuildServer server, @NotNull BuildsManager buildsManager) {
         this.server = server;
+        this.buildsManager = buildsManager;
     }
 
     @PostConstruct
@@ -38,57 +40,61 @@ public class FogBugzNotifier extends BuildServerAdapter {
     }
 
     @Override
-    public void buildFinished(@NotNull SRunningBuild build) {
-        Status buildStatus = build.getBuildStatus();
-        String buildStatusText = buildStatus.getText();
-        Date finished = build.getFinishDate();
+    public void buildFinished(@NotNull SRunningBuild runningBuild) {
+        long buildId = runningBuild.getBuildId();
+
+        LOG.debug(String.format("Build %s finished. Preparing to send data to FogBugz.", buildId));
+
+        SBuild finishedBuild = this.buildsManager.findBuildInstanceById(buildId);
+
+        Status buildStatus = finishedBuild.getBuildStatus();
+        String buildStatusEventType = buildStatus.isSuccessful() ? "build-success" : "build-failure";
+        Date finished = finishedBuild.getFinishDate();
         if (finished == null) {
             finished = new Date();
         }
-
         DateTime dtFinished = new DateTime(finished);
 
-        String statusDescription = build.getStatusDescriptor().getText();
-        String rootUrl = this.server.getRootUrl();
+        String personName = null;
+        TriggeredBy triggeredBy = finishedBuild.getTriggeredBy();
+        if (triggeredBy != null && triggeredBy.isTriggeredByUser()) {
+            SUser user = triggeredBy.getUser();
+            personName = user.getUsername();
+        }
 
-        for (SBuildFeatureDescriptor feature : build.getBuildFeaturesOfType(FogBugzNotifierBuildFeature.FEATURE_TYPE)) {
+        String statusDescription = finishedBuild.getStatusDescriptor().getText();
+
+        WebLinks links = new WebLinks(this.server);
+        String viewResultsUrl = links.getViewResultsUrl(finishedBuild);
+
+        for (SBuildFeatureDescriptor feature : finishedBuild.getBuildFeaturesOfType(FogBugzNotifierBuildFeature.FEATURE_TYPE)) {
             Map<String, String> featureParams = feature.getParameters();
             String url = featureParams.get("fbAddress");
             String token = featureParams.get("sToken");
 
-            FogBugzEventData data = new FogBugzEventData();
-            data.setAction("event");
-            data.setEventType("build-success");
-            data.setBug("6");
-            data.setEventUtc(dtFinished);
-            data.setMessage(statusDescription);
-            data.setExternalUrl(rootUrl);
+            LOG.debug(String.format("Build %s is configured with fbAddress=%s, sToken=%s", buildId, url, token));
 
-            //LOG.debug(String.format("Build feature '%s': server address=%s", feature.getType(), url));
-            //LOG.info(buildStatusText +": "+ statusDescription);
+            for (Issue issue : finishedBuild.getRelatedIssues()) {
+                String bugzId = issue.getId();
 
-            try {
-                postData(url, token, data);
-            }
-            catch (Exception ex) {
-                LOG.error("Failed to notify FogBugz Extended Events plugin.", ex);
+                FogBugzEventData data = new FogBugzEventData();
+                data.setAction("event");
+                data.setEventType(buildStatusEventType);
+                data.setBug(bugzId);
+                data.setEventUtc(dtFinished);
+                data.setPersonName(personName);
+                data.setMessage(statusDescription);
+                data.setExternalUrl(viewResultsUrl);
+
+                try {
+                    LOG.info(String.format("Sending data to FogBugz case '%s'", bugzId));
+                    postData(url, token, data);
+                }
+                catch (Exception ex) {
+                    LOG.error("Failed to notify FogBugz Extended Events plugin.", ex);
+                }
             }
         }
-    }
-
-    private String postData(String url, List<NameValuePair> params) throws Exception {
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(url);
-        UrlEncodedFormEntity paramsEntity = new UrlEncodedFormEntity(params);
-        httpPost.setEntity(paramsEntity);
-
-        CloseableHttpResponse response = client.execute(httpPost);
-        String responseString = new BasicResponseHandler().handleResponse(response);
-
-        response.close();
-        client.close();
-
-        return responseString;
     }
 
     public String postData(String fogbugzUrl, String token, FogBugzEventData data) throws Exception {
@@ -99,5 +105,23 @@ public class FogBugzNotifier extends BuildServerAdapter {
 
         String response = postData(pluginUrl, params);
         return response;
+    }
+
+    private String postData(String url, List<NameValuePair> params) throws Exception {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+        UrlEncodedFormEntity paramsEntity = new UrlEncodedFormEntity(params);
+        httpPost.setEntity(paramsEntity);
+
+        String paramsString = EntityUtils.toString(paramsEntity);
+        LOG.debug(String.format("Posting to FogBugz: %s POST data: %s", url, paramsString));
+
+        CloseableHttpResponse response = client.execute(httpPost);
+        String responseString = new BasicResponseHandler().handleResponse(response);
+
+        response.close();
+        client.close();
+
+        return responseString;
     }
 }

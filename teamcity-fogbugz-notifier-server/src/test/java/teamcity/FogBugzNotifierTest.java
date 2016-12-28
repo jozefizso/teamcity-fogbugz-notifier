@@ -3,6 +3,7 @@ package teamcity;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import jdk.nashorn.internal.parser.JSONParser;
+import jetbrains.buildServer.serverSide.BuildsManager;
 import jetbrains.buildServer.serverSide.SBuildServer;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -19,7 +20,8 @@ public class FogBugzNotifierTest {
     public void register_notifierInstance_registerInstanceAsListener() throws Exception {
         // Arrange
         SBuildServer serverMock = mock(SBuildServer.class);
-        FogBugzNotifier notifier = new FogBugzNotifier(serverMock);
+        BuildsManager buildsManagerMock = mock(BuildsManager.class);
+        FogBugzNotifier notifier = new FogBugzNotifier(serverMock, buildsManagerMock);
 
         // Act
         notifier.register();
@@ -33,7 +35,8 @@ public class FogBugzNotifierTest {
     public void postData_integrationFogBugzInstance_postsCorrectBuildStatus() throws Exception {
         // Arrange
         SBuildServer serverMock = mock(SBuildServer.class);
-        FogBugzNotifier notifier = new FogBugzNotifier(serverMock);
+        BuildsManager buildsManagerMock = mock(BuildsManager.class);
+        FogBugzNotifier notifier = new FogBugzNotifier(serverMock, buildsManagerMock);
 
         String fogbugzUrl = "http://localhost/fb";
         String token = "5pkrbmabac5bidigiriac70dtkc55h";
