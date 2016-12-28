@@ -62,6 +62,7 @@ public class FogBugzNotifier extends BuildServerAdapter {
             personName = user.getUsername();
         }
 
+        String buildName = finishedBuild.getBuildTypeName();
         String statusDescription = finishedBuild.getStatusDescriptor().getText();
 
         WebLinks links = new WebLinks(this.server);
@@ -87,6 +88,7 @@ public class FogBugzNotifier extends BuildServerAdapter {
                 data.setPersonName(personName);
                 data.setMessage(statusDescription);
                 data.setExternalUrl(viewResultsUrl);
+                data.setBuildName(buildName);
                 data.setModuleName(moduleName);
                 data.setBranchName(branchName);
 

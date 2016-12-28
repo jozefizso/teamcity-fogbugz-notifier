@@ -26,6 +26,7 @@ public class FogBugzEventData {
     private String sPersonName;
     private String sMessage;
     private String sExternalUrl;
+    private String sBuildName;
     private String sModuleName;
     private String sBranchName;
 
@@ -93,6 +94,14 @@ public class FogBugzEventData {
         this.sExternalUrl = sExternalUrl;
     }
 
+    public String getBuildName() {
+        return sBuildName;
+    }
+
+    public void setBuildName(String sBuildName) {
+        this.sBuildName = sBuildName;
+    }
+
     public String getModuleName() {
         return sModuleName;
     }
@@ -119,6 +128,7 @@ public class FogBugzEventData {
         params.add(new BasicNameValuePair("sPersonName", this.sPersonName));
         params.add(new BasicNameValuePair("sMessage", this.sMessage));
         params.add(new BasicNameValuePair("sExternalUrl", this.sExternalUrl));
+        params.add(new BasicNameValuePair("sBuildName", this.sBuildName));
         params.add(new BasicNameValuePair("sModuleName", this.sModuleName));
         params.add(new BasicNameValuePair("sBranchName", this.sBranchName));
 
