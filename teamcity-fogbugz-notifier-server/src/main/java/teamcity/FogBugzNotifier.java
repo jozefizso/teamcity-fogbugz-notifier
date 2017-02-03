@@ -1,9 +1,10 @@
 package teamcity;
 
+import com.google.common.base.Strings;
 import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.issueTracker.Issue;
-import jetbrains.buildServer.messages.BuildMessage1;
 import jetbrains.buildServer.messages.Status;
+import jetbrains.buildServer.parameters.ParametersProvider;
 import jetbrains.buildServer.serverSide.*;
 import jetbrains.buildServer.users.SUser;
 import org.apache.http.NameValuePair;
@@ -13,15 +14,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class FogBugzNotifier extends BuildServerAdapter {
     private static Logger LOG = Logger.getInstance(FogBugzNotifier.class.getName());
@@ -63,7 +63,10 @@ public class FogBugzNotifier extends BuildServerAdapter {
         }
 
         String buildName = finishedBuild.getBuildTypeName();
+        String buildDescription = getBuildDescription(finishedBuild);
         String statusDescription = finishedBuild.getStatusDescriptor().getText();
+
+        String message = String.format("%s\n<p>%s</p>", buildDescription, statusDescription);
 
         WebLinks links = new WebLinks(this.server);
         String viewResultsUrl = links.getViewResultsUrl(finishedBuild);
@@ -86,7 +89,7 @@ public class FogBugzNotifier extends BuildServerAdapter {
                 data.setBug(bugzId);
                 data.setEventUtc(dtFinished);
                 data.setPersonName(personName);
-                data.setMessage(statusDescription);
+                data.setMessage(message);
                 data.setExternalUrl(viewResultsUrl);
                 data.setBuildName(buildName);
                 data.setModuleName(moduleName);
@@ -101,6 +104,28 @@ public class FogBugzNotifier extends BuildServerAdapter {
                 }
             }
         }
+    }
+
+    private String getBuildDescription(SBuild finishedBuild) {
+        ParametersProvider parameters = finishedBuild.getParametersProvider();
+        String buildNumber = parameters.get("build.number");
+        String buildRevision = parameters.get("build.vcs.number");
+        String buildCvsTag = parameters.get("BuildCvsTag");
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("<p>");
+        if (!Strings.isNullOrEmpty(buildNumber)) {
+            sb.append(String.format("<strong>Build Number:</strong> #%s<br>", buildNumber));
+        }
+        if (!Strings.isNullOrEmpty(buildNumber)) {
+            sb.append(String.format("<strong>Revision:</strong> %s<br>", buildRevision));
+        }
+        if (!Strings.isNullOrEmpty(buildNumber)) {
+            sb.append(String.format("<strong>BuildCvsTag:</strong> #%s<br>", buildCvsTag));
+        }
+        sb.append("</p>");
+
+        return sb.toString();
     }
 
     public String postData(String fogbugzUrl, String token, FogBugzEventData data) throws Exception {
