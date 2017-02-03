@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>teamcity</groupId>
   <artifactId>teamcity-fogbugz-notifier</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <packaging>pom</packaging>
   <properties>
     <teamcity-api-version>10.0</teamcity-api-version>
