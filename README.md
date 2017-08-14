@@ -1,13 +1,13 @@
 TeamCity FogBugz Notifier
 ==============================================================
 
-> *This plugin is incomplete and it is not actively developed.*
+> Send build status information to FogBugz Extended Events plugin.
 
-This plugin enables TeamCity deeper integration with FogBugz.
-The plugin will notify FogBugz about successful and failed build
+This plugin integrates TeamCity with FogBugz.
+The plugin will notify FogBugz about successful and failed builds
 that match a FogBugz case.
 
-This plugin requires the FogBugz Extended Events plugin to be
+This plugin requires the [FogBugz Extended Events](https://github.com/jozefizso/FogBugz-ExtendedEvents) plugin to be
 installed in FogBugz.
 
 Supported TeamCity servers:
@@ -20,7 +20,7 @@ Supported TeamCity servers:
 
 ### 1. Build
 Issue `mvn package` command from the root project to build the plugin.
-Resulting package will be placed in **target** directory. 
+Resulting package will be placed in **target** directory.
 
 ### 2. Run
 
@@ -36,4 +36,4 @@ mvn package tc-sdk:start
 
 ## License
 
-Copyright (c) 2015 Jozef Izso under [MIT License](LICENSE)
+Copyright © 2015-2017 Jozef Izso under [MIT License](LICENSE)
