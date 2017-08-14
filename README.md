@@ -11,6 +11,8 @@ This plugin requires the FogBugz Extended Events plugin to be
 installed in FogBugz.
 
 Supported TeamCity servers:
+* TeamCity 2017
+* TeamCity 10
 * TeamCity 9.1
 
 
