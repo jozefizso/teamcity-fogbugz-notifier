@@ -19,9 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FogBugzNotifier extends BuildServerAdapter {
     private static Logger LOG = Logger.getInstance(FogBugzNotifier.class.getName());
@@ -70,6 +68,7 @@ public class FogBugzNotifier extends BuildServerAdapter {
 
         WebLinks links = new WebLinks(this.server);
         String viewResultsUrl = links.getViewResultsUrl(finishedBuild);
+        Set<String> notifiedIssues = new HashSet<>();
 
         for (SBuildFeatureDescriptor feature : finishedBuild.getBuildFeaturesOfType(FogBugzNotifierBuildFeature.FEATURE_TYPE)) {
             Map<String, String> featureParams = feature.getParameters();
@@ -82,6 +81,10 @@ public class FogBugzNotifier extends BuildServerAdapter {
 
             for (Issue issue : finishedBuild.getRelatedIssues()) {
                 String bugzId = issue.getId();
+
+                if (notifiedIssues.contains(bugzId)) {
+                    continue;
+                }
 
                 FogBugzEventData data = new FogBugzEventData();
                 data.setAction("event");
@@ -98,6 +101,7 @@ public class FogBugzNotifier extends BuildServerAdapter {
                 try {
                     LOG.info(String.format("Sending data to FogBugz case '%s'", bugzId));
                     postData(url, token, data);
+                    notifiedIssues.add(bugzId);
                 }
                 catch (Exception ex) {
                     LOG.error("Failed to notify FogBugz Extended Events plugin.", ex);
